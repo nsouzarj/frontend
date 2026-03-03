@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: #f1f5f9;
+}
+
+.page-container {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Common utilities override/additions */
+.text-center {
+    text-align: center;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+@layer utilities {
+    .animate-fade-in-up {
+        animation: fadeInUp 0.5s ease-out;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.no-padding-dialog .mat-mdc-dialog-container .mat-mdc-dialog-surface {
+    padding: 0 !important;
+    border-radius: 12px !important;
+}
+
+/* Material Datepicker Theme Overrides to Match Tailwind Blue */
+.mat-datepicker-content .mat-calendar-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    border-color: #2563eb !important;
+    /* blue-600 */
+}
+
+.mat-calendar-body-selected {
+    background-color: #2563eb !important;
+    /* blue-600 */
+    color: white !important;
+}
+
+.mat-datepicker-toggle-active {
+    color: #2563eb !important;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+    color: #2563eb !important;
+}
+
+/* Optional: header correction if using standard material header */
+/* Highlight the Calendar Header */
+.mat-calendar-header {
+    background-color: #2563eb !important;
+    /* blue-600 */
+    color: white !important;
+    border-radius: 4px 4px 0 0;
+    padding: 10px;
+}
+
+.mat-calendar-controls .mat-calendar-period-button,
+.mat-calendar-controls .mat-calendar-arrow {
+    color: white !important;
+}
+
+.mat-calendar-controls .mat-icon-button {
+    color: white !important;
+}
+
+/* Ensure the calendar popup itself stands out */
+.mat-datepicker-content {
+    background-color: white !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    border: 1px solid #e5e7eb;
+}
+
+/* Fix Dropdown Transparency Issues */
+select {
+    background-color: white;
+}
+
+.mat-mdc-autocomplete-panel,
+.mat-mdc-select-panel {
+    background-color: white !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}

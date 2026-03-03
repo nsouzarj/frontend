@@ -1,0 +1,114 @@
+<div class="container mx-auto p-6">
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+    <h1 class="text-3xl font-bold text-gray-800 flex items-center">
+        <mat-icon class="mr-2 text-primary-600 scale-125">medical_services</mat-icon>
+        Veterinários
+    </h1>
+    <div class="flex gap-2">
+        <a mat-raised-button color="primary" routerLink="/doctors/new">
+            <mat-icon>add</mat-icon>
+            Novo Veterinário
+        </a>
+        <a mat-button routerLink="/dashboard">
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+        </a>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 relative flex items-center" role="alert">
+    <mat-icon class="mr-2">error</mat-icon>
+    <span class="block sm:inline"> {{ errorMessage }}</span>
+    <button mat-button color="warn" class="ml-auto" (click)="loadDoctors()">
+       Recarregar
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+    <mat-spinner diameter="50"></mat-spinner>
+    <span class="ml-4 text-gray-600">Carregando veterinários...</span>
+  </div>
+
+  <div [class.hidden]="isLoading" class="mat-elevation-z8 rounded-lg overflow-hidden bg-white">
+    <!-- Filter -->
+    <div class="px-6 pt-4">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Filtrar</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Busque por nome, CRMV ou especialidade..." #input>
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table mat-table [dataSource]="dataSource" class="w-full" matSort>
+
+          <!-- Nome Column -->
+          <ng-container matColumnDef="full_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50 font-bold text-gray-700"> Nome </th>
+            <td mat-cell *matCellDef="let doctor" class="text-gray-900 font-medium"> 
+                {{doctor.full_name}} 
+                <div class="text-xs text-gray-500">{{doctor.email}}</div>
+            </td>
+          </ng-container>
+
+          <!-- CRMV Column -->
+          <ng-container matColumnDef="crmv">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50 font-bold text-gray-700"> CRMV </th>
+            <td mat-cell *matCellDef="let doctor" class="text-gray-700"> {{doctor.crmv}} </td>
+          </ng-container>
+
+          <!-- Especialidade Column -->
+          <ng-container matColumnDef="specialty">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50 font-bold text-gray-700"> Especialidade </th>
+            <td mat-cell *matCellDef="let doctor">
+                <span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">
+                    {{doctor.specialty || 'Geral'}}
+                </span>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50 font-bold text-gray-700"> Status </th>
+            <td mat-cell *matCellDef="let doctor">
+                <mat-chip-set>
+                    <mat-chip [color]="doctor.is_active ? 'primary' : 'warn'" selected>
+                        {{doctor.is_active ? 'Ativo' : 'Inativo'}}
+                    </mat-chip>
+                </mat-chip-set>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="bg-gray-50 font-bold text-gray-700 text-right pr-6"> Ações </th>
+            <td mat-cell *matCellDef="let doctor" class="text-right pr-4">
+                <a mat-icon-button [routerLink]="['/doctors', doctor.id]" matTooltip="Editar">
+                    <mat-icon class="text-blue-600">edit</mat-icon>
+                </a>
+                <button mat-icon-button (click)="deleteDoctor(doctor)" matTooltip="Excluir">
+                    <mat-icon class="text-rose-600">delete</mat-icon>
+                </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50 transition-colors"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell text-center py-6 text-gray-500" colspan="5">
+               <div class="flex flex-col items-center justify-center">
+                   <mat-icon class="text-gray-300 text-4xl mb-2 scale-150">search_off</mat-icon>
+                   <span *ngIf="input.value">Nenhum veterinário encontrado com o filtro "{{input.value}}"</span>
+                   <span *ngIf="!input.value">Nenhum veterinário cadastrado.</span>
+               </div>
+            </td>
+          </tr>
+        </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Selecione a página de veterinários"></mat-paginator>
+  </div>
+</div>

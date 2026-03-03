@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>{{ data.pet ? 'Editar Pet' : 'Novo Pet' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="petForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" placeholder="Ex: Rex">
+      <mat-error *ngIf="petForm.get('name')?.hasError('required')">
+        Nome é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Espécie</mat-label>
+      <mat-select formControlName="species">
+        <mat-option *ngFor="let species of speciesOptions" [value]="species">
+          {{ species | speciesTranslate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width" *ngIf="petForm.get('species')?.value === 'dog'">
+      <mat-label>Porte</mat-label>
+      <mat-select formControlName="size">
+        <mat-option value="SMALL">Pequeno</mat-option>
+        <mat-option value="MEDIUM">Médio</mat-option>
+        <mat-option value="LARGE">Grande</mat-option>
+      </mat-select>
+       <mat-error *ngIf="petForm.get('size')?.hasError('required')">
+        Porte é obrigatório para cães
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Raça</mat-label>
+      <input type="text"
+             matInput
+             formControlName="breed"
+             [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let breed of filteredBreeds | async" [value]="breed.name">
+          {{breed.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Idade (anos)</mat-label>
+        <input matInput type="number" formControlName="age_years">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="w-full">
+        <mat-label>Peso (kg)</mat-label>
+        <input matInput type="number" step="0.1" formControlName="weight_kg">
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="petForm.invalid || isLoading">
+    {{ isLoading ? 'Salvando...' : 'Salvar' }}
+  </button>
+</mat-dialog-actions>

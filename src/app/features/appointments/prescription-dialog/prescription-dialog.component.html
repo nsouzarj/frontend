@@ -1,0 +1,194 @@
+<div class="flex flex-col h-[85vh] max-h-[900px]">
+  <div class="flex items-center justify-between p-7 border-b border-gray-100 bg-white rounded-t-xl shadow-sm z-10">
+    <div class="flex items-center gap-5">
+        <div class="bg-primary-50 p-3 rounded-2xl border border-primary-100">
+            <mat-icon class="text-primary-600 scale-125">pets</mat-icon>
+        </div>
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 m-0 leading-tight tracking-tight">Emitir Receita</h2>
+            <div class="flex items-center gap-4 mt-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-gray-500 uppercase tracking-wider font-bold">Paciente</span>
+                    <span class="bg-primary-100 text-primary-800 px-3 py-0.5 rounded-full text-sm font-bold border border-primary-200">
+                        {{ data.petName }}
+                    </span>
+                </div>
+                
+                <div class="h-4 w-px bg-gray-300"></div>
+
+                <div class="flex items-center gap-4 text-sm text-gray-600">
+                    <span *ngIf="data.petWeight" class="flex items-center gap-1" matTooltip="Peso">
+                        <mat-icon class="text-gray-400 text-sm">monitor_weight</mat-icon> {{ data.petWeight }}kg
+                    </span>
+                    <span *ngIf="!data.petWeight" class="flex items-center gap-1 text-gray-400 italic">
+                        <mat-icon class="text-sm">monitor_weight</mat-icon> -- kg
+                    </span>
+
+                    <span *ngIf="data.petAge" class="flex items-center gap-1" matTooltip="Idade">
+                        <mat-icon class="text-gray-400 text-sm">cake</mat-icon> {{ data.petAge }} anos
+                    </span>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col items-end gap-1">
+        <button mat-icon-button mat-dialog-close class="hover:bg-gray-100 transition-colors mb-1">
+            <mat-icon class="text-gray-500">close</mat-icon>
+        </button>
+        <span class="text-xs font-medium text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">
+            {{ currentDate | date:'dd/MM/yyyy' }}
+        </span>
+        <!-- Debug: {{ data.petId ? 'PetID: ' + data.petId : 'No PetID' }} -->
+    </div>
+    </div>
+
+  <div class="flex-1 overflow-auto bg-gray-50/50 p-8 space-y-8">
+    
+
+
+    <!-- Medication Adder -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-sm hover:shadow-md transition-shadow duration-300">
+        <div class="flex justify-between items-start mb-6">
+            <h3 class="text-base font-bold text-gray-800 flex items-center gap-2">
+                <div class="bg-blue-100 p-1.5 rounded-lg">
+                    <mat-icon class="text-blue-600 text-sm">medication</mat-icon>
+                </div>
+                Adicionar Medicamento
+            </h3>
+        </div>
+        
+        <form [formGroup]="medForm" (ngSubmit)="addMedication()" class="flex flex-col gap-4">
+            <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+                <mat-label>Nome do Medicamento</mat-label>
+                <input matInput formControlName="name" placeholder="Ex: Amoxicilina 250mg">
+                <mat-icon matSuffix class="text-gray-400">healing</mat-icon>
+                <mat-error *ngIf="medForm.get('name')?.hasError('required')">Obrigatório</mat-error>
+            </mat-form-field>
+
+            <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
+                <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+                    <mat-label>Via de Administração</mat-label>
+                    <mat-select formControlName="route" placeholder="Selecione a via">
+                        <mat-option *ngFor="let route of routes" [value]="route">
+                            {{ route }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix class="text-gray-400 mr-2">alt_route</mat-icon>
+                    <mat-error *ngIf="medForm.get('route')?.hasError('required')">Obrigatório</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+                    <mat-label>Dosagem</mat-label>
+                    <input matInput formControlName="dosage" placeholder="Ex: 1 comprimido">
+                    <mat-error *ngIf="medForm.get('dosage')?.hasError('required')">Obrigatório</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="flex flex-col md:grid md:grid-cols-2 gap-4">
+                <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+                    <mat-label>Frequência</mat-label>
+                    <input matInput formControlName="frequency" placeholder="Ex: 12 em 12 horas">
+                    <mat-error *ngIf="medForm.get('frequency')?.hasError('required')">Obrigatório</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+                    <mat-label>Duração</mat-label>
+                    <input matInput formControlName="duration" placeholder="Ex: 5 dias">
+                    <mat-error *ngIf="medForm.get('duration')?.hasError('required')">Obrigatório</mat-error>
+                </mat-form-field>
+            </div>
+            
+            <div class="flex justify-end pt-2">
+                 <button mat-flat-button color="accent" type="submit" [disabled]="medForm.invalid" class="w-full sm:w-auto h-12 text-base">
+                    <mat-icon>add_circle</mat-icon>
+                    Adicionar Medicamento
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Medication List -->
+    <div *ngIf="medications.length > 0" class="animate-fadeIn">
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4 px-1">Medicamentos Prescritos</h3>
+        <div class="grid grid-cols-1 gap-4">
+            <div *ngFor="let med of medications; let i = index" class="group relative flex flex-col sm:flex-row sm:items-center justify-between bg-white border border-gray-200 p-5 rounded-xl hover:border-primary-200 hover:shadow-md transition-all duration-200">
+                <div class="flex items-start gap-4">
+                    <div class="bg-gray-100 text-gray-500 font-bold w-8 h-8 rounded-full flex items-center justify-center text-sm group-hover:bg-primary-100 group-hover:text-primary-700 transition-colors">
+                        {{ i + 1 }}
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 text-lg flex items-center gap-2">
+                            {{ med.name }} 
+                            <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-md font-medium">{{ med.dosage }}</span>
+                            <span class="bg-blue-50 text-blue-700 text-xs px-2 py-0.5 rounded-md font-medium border border-blue-100">{{ med.route }}</span>
+                        </h4>
+                        <div class="flex flex-wrap gap-x-6 gap-y-1 mt-1 text-sm text-gray-600">
+                            <span class="flex items-center gap-1"><mat-icon class="text-gray-400 text-sm h-4 w-4">schedule</mat-icon> {{ med.frequency }}</span>
+                            <span class="flex items-center gap-1"><mat-icon class="text-gray-400 text-sm h-4 w-4">date_range</mat-icon> {{ med.duration }}</span>
+                        </div>
+                    </div>
+                </div>
+                <button mat-icon-button color="warn" (click)="removeMedication(med.id)" matTooltip="Remover" class="mt-2 sm:mt-0 opacity-60 group-hover:opacity-100 transition-opacity">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div *ngIf="medications.length === 0" class="flex flex-col items-center justify-center py-12 text-gray-400 bg-white/50 rounded-2xl border-2 border-dashed border-gray-200">
+        <mat-icon class="text-4xl text-gray-200 mb-2">format_list_bulleted</mat-icon>
+        <span class="italic font-medium">Nenhum medicamento adicionado ainda.</span>
+    </div>
+
+    <!-- Instructions -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <h3 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <div class="bg-orange-100 p-1.5 rounded-lg">
+                <mat-icon class="text-orange-600 text-sm">description</mat-icon>
+            </div>
+            Observações Gerais
+        </h3>
+        <form [formGroup]="mainForm">
+            <mat-form-field appearance="outline" class="w-full remove-bottom-padding" subscriptSizing="dynamic">
+                <textarea matInput formControlName="instructions" rows="4" placeholder="Instruções adicionais, recomendações de dieta, retorno..."></textarea>
+            </mat-form-field>
+        </form>
+    </div>
+
+    <!-- Previous Prescriptions History (Moved to bottom) -->
+    <div *ngIf="previousPrescriptions.length > 0" class="bg-blue-50 border border-blue-100 rounded-xl p-4">
+        <h3 class="text-sm font-bold text-blue-800 mb-2 flex items-center gap-2">
+            <mat-icon class="text-blue-500 scale-90">history</mat-icon>
+            Receitas Anteriores Nesta Consulta
+        </h3>
+        <div class="space-y-2">
+            <div *ngFor="let p of previousPrescriptions" class="flex items-center justify-between bg-white p-3 rounded-lg border border-blue-100 shadow-sm">
+                <div class="text-sm text-gray-600">
+                    <span class="font-bold">Gerada em:</span> {{ p.created_at | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+                <div class="flex gap-2">
+                    <button mat-flat-button class="!bg-gradient-to-r !from-emerald-500 !to-teal-600 !text-white !font-bold !scale-90 shadow-sm hover:shadow-md transition-all" (click)="printOldPdf(p)">
+                        <mat-icon class="text-white">print</mat-icon> Imprimir
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deletePrescription(p)" matTooltip="Excluir">
+                         <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="p-6 bg-white border-t border-gray-200 rounded-b-xl flex justify-between items-center z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+    <div class="text-sm text-gray-500 hidden sm:block">
+        Confira os dados antes de emitir.
+    </div>
+    <div class="flex gap-4 w-full sm:w-auto">
+        <button mat-button mat-dialog-close [disabled]="isSaving" class="flex-1 sm:flex-none py-2.5">Fechar</button>
+        <button mat-raised-button color="primary" (click)="save()" [disabled]="(medications.length === 0 && !mainForm.get('instructions')?.value) || isSaving" class="flex-1 sm:flex-none px-8 py-2.5 !rounded-lg !text-base shadow-lg hover:shadow-xl transition-all">
+            <mat-icon class="mr-2">print</mat-icon>
+            {{ isSaving ? 'Emitindo...' : 'Emitir Receita PDF' }}
+        </button>
+    </div>
+  </div>
+</div>

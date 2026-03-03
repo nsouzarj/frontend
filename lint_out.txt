@@ -1,0 +1,33 @@
+﻿
+============================================================
+[LINT RUNNER] Unified Linting
+============================================================
+Project: D:\Projetos\clinipet\frontend
+Time: 2026-02-21 11:06:17
+Type: node
+Linters: 1
+------------------------------------------------------------
+
+Running: tsc...
+  [FAIL] tsc
+  Error: Command not found: npx
+
+============================================================
+SUMMARY
+============================================================
+[FAIL] tsc
+
+{
+  "script": "lint_runner",
+  "project": "D:\\Projetos\\clinipet\\frontend",
+  "type": "node",
+  "checks": [
+    {
+      "name": "tsc",
+      "passed": false,
+      "output": "",
+      "error": "Command not found: npx"
+    }
+  ],
+  "passed": false
+}

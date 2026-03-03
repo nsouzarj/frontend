@@ -1,0 +1,121 @@
+<div class="flex flex-col h-[85vh] max-h-[900px]">
+  <div class="flex items-center justify-between p-7 border-b border-gray-100 bg-white rounded-t-xl shadow-sm z-10">
+    <div class="flex items-center gap-5">
+        <div class="bg-purple-50 p-3 rounded-2xl border border-purple-100">
+            <mat-icon class="text-purple-600 scale-125">science</mat-icon>
+        </div>
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 m-0 leading-tight tracking-tight">Solicitar Exames</h2>
+            <div class="flex items-center gap-4 mt-2">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-gray-500 uppercase tracking-wider font-bold">Paciente</span>
+                    <span class="bg-purple-100 text-purple-800 px-3 py-0.5 rounded-full text-sm font-bold border border-purple-200">
+                        {{ data.petName }}
+                    </span>
+                </div>
+                
+                <div class="h-4 w-px bg-gray-300"></div>
+
+                <div class="flex items-center gap-4 text-sm text-gray-600">
+                     <span *ngIf="data.petAge" class="flex items-center gap-1" matTooltip="Idade">
+                        <mat-icon class="text-gray-400 text-sm">cake</mat-icon> {{ data.petAge }} anos
+                    </span>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col items-end gap-1">
+        <button mat-icon-button mat-dialog-close class="hover:bg-gray-100 transition-colors mb-1">
+            <mat-icon class="text-gray-500">close</mat-icon>
+        </button>
+        <span class="text-xs font-medium text-gray-400 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">
+            {{ currentDate | date:'dd/MM/yyyy' }}
+        </span>
+    </div>
+  </div>
+
+  <div class="flex-1 overflow-auto bg-gray-50/50 p-8 space-y-8">
+    
+
+
+    <!-- Common Exams -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-7 shadow-sm">
+        <h3 class="text-base font-bold text-gray-800 flex items-center gap-2 mb-4">
+             <div class="bg-purple-100 p-1.5 rounded-lg">
+                <mat-icon class="text-purple-600 text-sm">fact_check</mat-icon>
+            </div>
+            Exames Comuns
+        </h3>
+        
+        <div class="flex flex-col md:grid md:grid-cols-2 gap-3">
+             <div *ngFor="let exam of commonExams; let i = index" 
+                  (click)="toggleExam(i)"
+                  [class.bg-purple-50]="exam.selected"
+                  [class.border-purple-200]="exam.selected"
+                  class="flex items-center p-3 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50 transition-all select-none">
+                 <mat-checkbox [checked]="exam.selected" (click)="$event.stopPropagation(); toggleExam(i)" color="primary" class="pointer-events-none mr-2"></mat-checkbox>
+                 <span [class.font-medium]="exam.selected" [class.text-purple-900]="exam.selected" class="text-gray-700">{{ exam.name }}</span>
+             </div>
+        </div>
+    </div>
+    
+    <!-- Other Exams & Observations -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+         <form [formGroup]="form" class="space-y-6">
+            <div>
+                 <h3 class="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <mat-icon class="text-gray-400 text-sm">add</mat-icon> Outros Exames
+                 </h3>
+                 <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
+                    <textarea matInput formControlName="otherExams" rows="2" placeholder="Digite outros exames não listados acima..."></textarea>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                     <mat-icon class="text-orange-400 text-sm">description</mat-icon> Indicação Clínica / Observações
+                </h3>
+                <mat-form-field appearance="outline" class="w-full remove-bottom-padding" subscriptSizing="dynamic">
+                    <textarea matInput formControlName="observations" rows="3" placeholder="Suspeita clínica, região específica para RX/USG, etc..."></textarea>
+                </mat-form-field>
+            </div>
+        </form>
+    </div>
+
+    <!-- Previous Exams History (Moved to bottom) -->
+    <div *ngIf="previousExams.length > 0" class="bg-purple-50 border border-purple-100 rounded-xl p-4">
+        <h3 class="text-sm font-bold text-purple-800 mb-2 flex items-center gap-2">
+            <mat-icon class="text-purple-500 scale-90">history</mat-icon>
+            Pedidos Anteriores (Histórico)
+        </h3>
+        <div class="space-y-2">
+            <div *ngFor="let p of previousExams" class="flex items-center justify-between bg-white p-3 rounded-lg border border-purple-100 shadow-sm">
+                <div class="text-sm text-gray-600">
+                    <span class="font-bold">Gerado em:</span> {{ p.created_at | date:'dd/MM/yyyy HH:mm' }}
+                </div>
+                <div class="flex gap-2">
+                    <button mat-flat-button class="!bg-gradient-to-r !from-emerald-500 !to-teal-600 !text-white !font-bold !scale-90 shadow-sm hover:shadow-md transition-all" (click)="printOldPdf(p)">
+                        <mat-icon class="text-white">print</mat-icon> Imprimir
+                    </button>
+                    <button mat-icon-button color="warn" (click)="deleteExam(p)" matTooltip="Excluir">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="p-6 bg-white border-t border-gray-200 rounded-b-xl flex justify-between items-center z-10 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+    <div class="text-sm text-gray-500 hidden sm:block">
+        Selecione os exames necessários.
+    </div>
+    <div class="flex gap-4 w-full sm:w-auto">
+        <button mat-button mat-dialog-close [disabled]="isSaving" class="flex-1 sm:flex-none py-2.5">Fechar</button>
+        <button mat-raised-button color="primary" (click)="save()" [disabled]="isSaving" class="flex-1 sm:flex-none px-8 py-2.5 !rounded-lg !text-base shadow-lg hover:shadow-xl transition-all">
+            <mat-icon class="mr-2">print</mat-icon>
+            {{ isSaving ? 'Gerando...' : 'Gerar Pedido' }}
+        </button>
+    </div>
+  </div>
+</div>

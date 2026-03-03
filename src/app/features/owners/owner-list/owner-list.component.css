@@ -1,0 +1,28 @@
+.header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header-actions h1 {
+    margin: 0;
+    color: #3f51b5;
+    /* Primary color */
+}
+
+.table-container {
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+}
+
+.error-message {
+    color: #f44336;
+    margin-bottom: 16px;
+    background-color: #fee;
+    padding: 10px;
+    border-radius: 4px;
+}

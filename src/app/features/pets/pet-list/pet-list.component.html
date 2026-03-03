@@ -1,0 +1,114 @@
+<div class="container mx-auto p-6">
+  <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+    <h1 class="text-3xl font-bold text-gray-800 flex items-center">
+        <mat-icon class="mr-2 text-primary-600 scale-125">pets</mat-icon>
+        Pets (Pacientes)
+    </h1>
+    <div class="flex gap-2">
+        <a mat-button routerLink="/dashboard">
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+        </a>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 relative flex items-center" role="alert">
+    <mat-icon class="mr-2">error</mat-icon>
+    <span class="block sm:inline"> {{ errorMessage }}</span>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+    <mat-spinner diameter="50"></mat-spinner>
+    <span class="ml-4 text-gray-600">Carregando pets...</span>
+  </div>
+
+  <div [class.hidden]="isLoading" class="mat-elevation-z8 rounded-lg overflow-hidden bg-white">
+    <!-- Filter -->
+    <div class="px-6 pt-4">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Filtrar</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Busque por nome, espécie ou tutor..." #input>
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table mat-table [dataSource]="dataSource" class="w-full" matSort>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50 font-bold text-gray-700"> Nome </th>
+            <td mat-cell *matCellDef="let pet" class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 h-10 w-10">
+                       <div class="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 font-bold uppercase">
+                          {{ pet.name.charAt(0) }}
+                       </div>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-gray-900 font-semibold">{{ pet.name }}</p>
+                    </div>
+                </div>
+            </td>
+        </ng-container>
+
+        <!-- Species Column -->
+        <ng-container matColumnDef="species">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50 font-bold text-gray-700"> Espécie / Raça </th>
+            <td mat-cell *matCellDef="let pet" class="text-gray-900 capitalize">
+                {{ pet.species | speciesTranslate }} <span class="text-gray-500 text-xs" *ngIf="pet.breed">({{ pet.breed }})</span>
+            </td>
+        </ng-container>
+
+        <!-- Age Column -->
+        <ng-container matColumnDef="age">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50 font-bold text-gray-700"> Idade / Peso </th>
+            <td mat-cell *matCellDef="let pet" class="text-gray-900">
+                {{ pet.age_years }} anos <span class="mx-1">•</span> {{ pet.weight_kg }} kg
+            </td>
+        </ng-container>
+
+        <!-- Owner Column -->
+        <ng-container matColumnDef="owner">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="bg-gray-50 font-bold text-gray-700"> Tutor </th>
+            <td mat-cell *matCellDef="let pet">
+                <a [routerLink]="['/owners', pet.owner_id]" class="text-blue-600 hover:underline">
+                    {{ pet.owner?.full_name || 'Tutor #' + pet.owner_id }}
+                </a>
+            </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="bg-gray-50 font-bold text-gray-700 text-right pr-6"> Ações </th>
+            <td mat-cell *matCellDef="let pet" class="text-right pr-4">
+                <button mat-icon-button (click)="editPet(pet)" matTooltip="Editar">
+                    <mat-icon class="text-blue-600">edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deletePet(pet)" matTooltip="Excluir">
+                    <mat-icon class="text-rose-600">delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-gray-50 transition-colors"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell text-center py-6 text-gray-500" colspan="5">
+               <div class="flex flex-col items-center justify-center">
+                   <mat-icon class="text-gray-300 text-4xl mb-2 scale-150">search_off</mat-icon>
+                   <span *ngIf="input.value">Nenhum pet encontrado com o filtro "{{input.value}}"</span>
+                   <span *ngIf="!input.value">Nenhum pet cadastrado.</span>
+               </div>
+            </td>
+        </tr>
+        </table>
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Selecione a página de pets"></mat-paginator>
+  </div>
+</div>

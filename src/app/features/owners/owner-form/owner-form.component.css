@@ -1,0 +1,24 @@
+.form-card {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.owner-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.error-message {
+    color: #f44336;
+    margin-bottom: 16px;
+    text-align: center;
+}

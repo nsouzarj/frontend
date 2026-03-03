@@ -1,0 +1,88 @@
+/* Background Pattern */
+.bg-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+/* Glassmorphism Card Effect */
+.glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Floating Animation */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+.animate-float {
+    animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+    animation: float 10s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+/* Customizing Material Form Fields for Cleaner Look */
+.custom-input .mdc-text-field--outlined {
+    --mdc-outlined-text-field-container-shape: 12px;
+    --mdc-outlined-text-field-outline-color: #e5e7eb;
+    /* gray-200 */
+    --mdc-outlined-text-field-focus-outline-color: #0f766e;
+    /* primary-700 */
+    background-color: #f9fafb;
+    /* gray-50 */
+}
+
+.custom-input .mdc-text-field--outlined:hover:not(.mdc-text-field--focused) .mdc-notched-outline__leading,
+.custom-input .mdc-text-field--outlined:hover:not(.mdc-text-field--focused) .mdc-notched-outline__notch,
+.custom-input .mdc-text-field--outlined:hover:not(.mdc-text-field--focused) .mdc-notched-outline__trailing {
+    border-color: #d1d5db;
+    /* gray-300 */
+}
+
+/* Hide Material Subscript Wrapper if desired (using class in HTML !subscript-wrapper-hidden) */
+.subscript-wrapper-hidden .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+}
+
+/* White Spinner Override */
+::ng-deep .white-spinner circle {
+    stroke: white !important;
+}
+
+/* Bounce In Animation */
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    70% {
+        transform: scale(0.9);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-bounce-in {
+    animation: bounceIn 0.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+}

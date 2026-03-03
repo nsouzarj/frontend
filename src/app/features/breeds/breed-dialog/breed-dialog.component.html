@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{ data.breed ? 'Editar Raça' : 'Nova Raça' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="breedForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome da Raça</mat-label>
+      <input matInput formControlName="name" placeholder="Ex: Golden Retriever">
+      <mat-icon matPrefix class="mr-2 text-gray-400">text_fields</mat-icon>
+      <mat-error *ngIf="breedForm.get('name')?.hasError('required')">
+        Obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Espécie</mat-label>
+      <mat-select formControlName="species">
+        <mat-option *ngFor="let s of speciesOptions" [value]="s">
+          {{ s | speciesTranslate }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix class="mr-2 text-gray-400">category</mat-icon>
+      <mat-error *ngIf="breedForm.get('species')?.hasError('required')">
+        Obrigatório
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="gap-3 p-4 border-t bg-gray-50/50">
+  <button mat-button mat-dialog-close class="!text-rose-600 hover:!bg-rose-50 px-4 h-11 rounded-lg font-bold transition-all">
+    <mat-icon class="mr-2">close</mat-icon>
+    Cancelar
+  </button>
+  <button mat-raised-button 
+          (click)="onSubmit()" 
+          [disabled]="breedForm.invalid || isLoading"
+          class="!bg-blue-600 !text-white hover:!bg-blue-700 disabled:!bg-gray-300 px-8 h-11 rounded-lg font-bold transition-all shadow-md">
+    <mat-icon class="mr-2">{{ isLoading ? 'sync' : 'save' }}</mat-icon>
+    {{ isLoading ? 'Salvando...' : 'Salvar' }}
+  </button>
+</mat-dialog-actions>

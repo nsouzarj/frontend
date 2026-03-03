@@ -1,0 +1,9 @@
+mat-sidenav {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+    border-right: none !important;
+    /* Remove default border to use our own if needed, or shadow */
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
+    /* Soft shadow for depth */
+}

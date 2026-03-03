@@ -1,0 +1,123 @@
+<div class="h-screen flex flex-col bg-slate-100">
+
+  <!-- Navbar (Top Elevation) -->
+  <mat-toolbar class="!bg-teal-700 !text-white shadow-lg z-30 px-6 border-b border-teal-800/50 flex justify-between items-center h-16 relative">
+
+    <!-- Brand / Toggle -->
+    <div class="flex items-center gap-4">
+        <button mat-icon-button (click)="toggleSidebar()" class="!text-teal-50 hover:!bg-teal-600/50 rounded-xl transition-colors" title="Menu">
+             <mat-icon class="!w-6 !h-6 text-[24px]">menu</mat-icon>
+        </button>
+
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/20 shadow-sm">
+                 <mat-icon class="text-teal-50 !w-5 !h-5 text-[20px]">pets</mat-icon>
+            </div>
+            <span class="text-xl font-bold text-white tracking-wide cursor-default drop-shadow-sm">CliniPet</span>
+        </div>
+    </div>
+
+    <!-- Right Actions -->
+    <div class="flex items-center gap-4">
+      <div class="hidden md:flex flex-col items-end mr-2">
+        <span class="text-sm font-semibold text-teal-50">{{ user()?.full_name || user()?.email || 'Administrador' }}</span>
+        <span class="text-xs text-teal-200 opacity-80">Unidade RJ</span>
+      </div>
+      <button mat-icon-button (click)="logout()" class="!text-teal-100 hover:!text-white hover:!bg-teal-600/50 transition-colors" title="Sair">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <mat-sidenav-container class="flex-1 bg-slate-100">
+    <!-- Sidebar -->
+    <!-- Using White theme for sidebar to contrast with Dark Teal Header, or stick to Dark Sidebar? -->
+    <!-- User wanted "more colorful". A white sidebar with colorful highlights is clean. -->
+    <!-- Let's try a dark teal sidebar to really reduce the "whiteness". -->
+    <mat-sidenav [mode]="sidenavMode" [opened]="isSidebarOpen"
+                 class="!bg-teal-900 border-r border-teal-800 shadow-xl overflow-hidden"
+                 [fixedInViewport]="false">
+
+      <div class="py-6 px-4">
+
+        <!-- Navigation List -->
+        <mat-nav-list class="space-y-2 pt-2" (click)="closeSidebarOnMobile()">
+
+          <a mat-list-item routerLink="/dashboard" routerLinkActive="!bg-teal-800 !text-teal-50 border-l-4 border-teal-400 shadow-md"
+             #rlaDashboard="routerLinkActive" [activated]="rlaDashboard.isActive"
+             class="!rounded-r-xl mx-0 mb-1 transition-all duration-200 hover:bg-teal-800/50 !text-white !h-12">
+            <mat-icon matListItemIcon class="!text-inherit mr-2">dashboard</mat-icon>
+            <span matListItemTitle class="font-medium tracking-wide">Dashboard</span>
+          </a>
+
+          <div class="uppercase text-[10px] font-bold text-white px-4 mt-8 mb-2 tracking-widest">Gestão</div>
+
+          <a mat-list-item routerLink="/owners" routerLinkActive="!bg-teal-800 !text-teal-50 border-l-4 border-teal-400 shadow-md"
+             #rlaOwners="routerLinkActive" [activated]="rlaOwners.isActive"
+             class="!rounded-r-xl mx-0 mb-1 transition-all duration-200 hover:bg-teal-800/50 !text-white !h-12">
+            <mat-icon matListItemIcon class="!text-inherit mr-2">people</mat-icon>
+            <span matListItemTitle class="font-medium tracking-wide">Tutores</span>
+          </a>
+
+          <a mat-list-item routerLink="/pets" routerLinkActive="!bg-teal-800 !text-teal-50 border-l-4 border-teal-400 shadow-md"
+             #rlaPets="routerLinkActive" [activated]="rlaPets.isActive"
+             class="!rounded-r-xl mx-0 mb-1 transition-all duration-200 hover:bg-teal-800/50 !text-white !h-12">
+             <mat-icon matListItemIcon class="!text-inherit mr-2">pets</mat-icon>
+             <span matListItemTitle class="font-medium tracking-wide">Pets</span>
+          </a>
+
+          <a mat-list-item routerLink="/breeds" routerLinkActive="!bg-teal-800 !text-teal-50 border-l-4 border-teal-400 shadow-md"
+             #rlaBreeds="routerLinkActive" [activated]="rlaBreeds.isActive"
+             class="!rounded-r-xl mx-0 mb-1 transition-all duration-200 hover:bg-teal-800/50 !text-white !h-12">
+            <mat-icon matListItemIcon class="!text-inherit mr-2">category</mat-icon>
+            <span matListItemTitle class="font-medium tracking-wide">Raças</span>
+          </a>
+
+          <div class="uppercase text-[10px] font-bold text-white px-4 mt-8 mb-2 tracking-widest">Clínica</div>
+
+          <a mat-list-item routerLink="/doctors" routerLinkActive="!bg-teal-800 !text-teal-50 border-l-4 border-teal-400 shadow-md"
+             #rlaDoctors="routerLinkActive" [activated]="rlaDoctors.isActive"
+             class="!rounded-r-xl mx-0 mb-1 transition-all duration-200 hover:bg-teal-800/50 !text-white !h-12">
+            <mat-icon matListItemIcon class="!text-inherit mr-2">medical_services</mat-icon>
+            <span matListItemTitle class="font-medium tracking-wide">Veterinários</span>
+          </a>
+
+
+          <a mat-list-item routerLink="/appointments" routerLinkActive="!bg-teal-800 !text-teal-50 border-l-4 border-teal-400 shadow-md"
+             #rlaAppointments="routerLinkActive" [activated]="rlaAppointments.isActive"
+             class="!rounded-r-xl mx-0 mb-1 transition-all duration-200 hover:bg-teal-800/50 !text-white !h-12">
+            <mat-icon matListItemIcon class="!text-inherit mr-2">calendar_today</mat-icon>
+            <span matListItemTitle class="font-medium tracking-wide">Consultas</span>
+          </a>
+
+          <a mat-list-item routerLink="/grooming" routerLinkActive="!bg-teal-800 !text-teal-50 border-l-4 border-teal-400 shadow-md"
+             #rlaGrooming="routerLinkActive" [activated]="rlaGrooming.isActive"
+             class="!rounded-r-xl mx-0 mb-1 transition-all duration-200 hover:bg-teal-800/50 !text-white !h-12">
+            <mat-icon matListItemIcon class="!text-inherit mr-2">content_cut</mat-icon>
+            <span matListItemTitle class="font-medium tracking-wide">Banho e Tosa</span>
+          </a>
+
+          <div class="uppercase text-[10px] font-bold text-white px-4 mt-8 mb-2 tracking-widest">Ajuda</div>
+
+          <a mat-list-item href="/USER_MANUAL.html" target="_blank"
+             class="!rounded-r-xl mx-0 mb-1 transition-all duration-200 hover:bg-teal-800/50 !text-white !h-12">
+            <mat-icon matListItemIcon class="!text-inherit mr-2">help_outline</mat-icon>
+            <span matListItemTitle class="font-medium tracking-wide">Manual do Usuário</span>
+          </a>
+
+        </mat-nav-list>
+      </div>
+
+      <!-- Decorative bottom gradient -->
+      <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-teal-950/80 to-transparent pointer-events-none"></div>
+    </mat-sidenav>
+
+    <!-- Main Content -->
+    <mat-sidenav-content class="bg-slate-200 min-h-full flex flex-col relative z-10">
+
+      <div class="p-8 max-w-7xl mx-auto w-full animate-fade-in-up z-10">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
