@@ -2,6 +2,64 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.1.
 
+## Arquitetura do Projeto
+
+O projeto Clinipet segue uma arquitetura baseada em funcionalidades (Feature-based Architecture) com Angular Standalone Components, utilizando o Supabase como Backend as a Service (BaaS).
+
+```mermaid
+graph TD
+    User([Usuário]) --> App[Aplicação Angular]
+    
+    subgraph App [Frontend Angular]
+        direction TB
+        
+        subgraph Features [Features - Módulos de Domínio]
+            Pets[Pets]
+            Owners[Owners]
+            Appointments[Appointments]
+            AuthFeature[Auth]
+        end
+        
+        subgraph Shared [Shared - UI e Utilitários]
+            UIComponents[Componentes UI - Material/Tailwind]
+            Pipes[Pipes]
+            Directives[Directives]
+        end
+        
+        subgraph Core [Core - Serviços Singleton]
+            Services[Serviços de Negócio]
+            Models[Interfaces/Tipos]
+            Interceptors[HTTP Interceptors]
+            Guards[Route Guards]
+            SupabaseClient[SupabaseService]
+        end
+        
+        Features --> Shared
+        Features --> Core
+        Shared --> Core
+    end
+    
+    Services --> SupabaseClient
+    Guards -.-> AuthFeature
+    
+    subgraph Backend [Backend Rest Supabase]
+        direction LR
+        DB[(Banco de Dados PostgreSQL)]
+        Auth[Autenticação]
+        Storage[Arquivos/Storage]
+    end
+    
+    SupabaseClient --> DB
+    SupabaseClient --> Auth
+    SupabaseClient --> Storage
+```
+
+### Estrutura de Diretórios
+
+- **`core/`**: Arquivos essenciais e instâncias Singleton, como Serviços (incluindo a integração via `SupabaseService`), Modelos de dados (Interfaces), Interceptores HTTP e Guards de roteamento.
+- **`features/`**: Módulos e páginas específicas do domínio do negócio (por exemplo: gerenciar pets, tutores, agendamentos). Cada funcionalidade é isolada e utiliza a diretriz `standalone: true`.
+- **`shared/`**: Reúne artefatos reaproveitáveis de UI que não possuem lógica de negócio estrita, baseados em Angular Material e Tailwind CSS, além de pipes e diretivas amplamente usados.
+
 ## Development server
 
 To start a local development server, run:
