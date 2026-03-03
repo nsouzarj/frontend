@@ -1,4 +1,21 @@
-# Clinipet
+# Clinipet 🐾
+
+O **Clinipet** é um moderno sistema web de gestão para clínicas veterinárias e hospitais focado no bem-estar animal e na eficiência administrativa. O seu **objetivo central** é digitalizar, centralizar e simplificar toda a trilha de atendimento veterinário — desde a recepção e cadastro até a execução das consultas médicas.
+
+A aplicação foi desenhada para oferecer uma interface veloz, limpa e que reduza os atritos diários dos profissionais, possibilitando que o foco se mantenha no principal: a saúde dos pacientes.
+
+## 🌟 Funcionalidades Principais
+
+O Clinipet é estruturado em subdomínios focados na operação clínica diária. As principais funcionalidades já em vigor (ou planejadas) incluem:
+
+*   🐶 **Pacientes (Pets)**: Cadastro detalhado dos animais contendo prontuário clínico simplificado, histórico de peso, idade e características específicas para anamnese e diagnósticos precisos.
+*   👤 **Tutores (Owners)**: Gerenciamento dos proprietários ou responsáveis legais, mantendo contato de emergência e histórico associado aos seus animais. Um tutor pode ter sob a sua responsabilidade múltiplos pacientes.
+*   📅 **Agendamentos (Appointments)**: Um poderoso sistema gerencial de marcações e controle do fluxo de atendimentos. Auxilia na visualização diária das consultas de acordo com horários, especialidades ou disponibilidade médica.
+*   🩺 **Corpo Clínico (Doctors)**: Cadastro e administração da equipe de veterinários atuantes com seus respectivos registros (CRMV), disponibilidades e acompanhamentos.
+*   🧬 **Raças (Breeds)**: Diretório padronizado para listagem de raças de diversas espécies, permitindo cadastros clinicamente consistentes e auxiliando para alertas de pré-disposição genética em exames ou medicações.
+*   🔐 **Autenticação Segura (Auth)**: Controle de acesso à clínica restrito por mecanismos em nuvem, garantindo a privacidade das informações dos pacientes e proteção do banco de dados para os profissionais locais.
+
+---
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.1.
 
